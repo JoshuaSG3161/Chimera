@@ -2,6 +2,9 @@
 
 
 import rospy  # this is the module required for all simulation communication
+import time
+
+start_time = time.time()
 
 # start of wheel control code
 from wheel_control.msg import wheelSpeed  # this is a required module for the drive communication
@@ -80,6 +83,7 @@ wheel = WheelController()
 
 # start of control loop snippet
 
+
 while not rospy.is_shutdown():  #this will run until gazebo is shut down or CTRL+C is pressed in the ubuntu window that is running this code
     minRange = 99 #initialize minRange to a value larger than what will be recieved
     for x in range(0, 15): #iterate through the ranges list
@@ -89,6 +93,8 @@ while not rospy.is_shutdown():  #this will run until gazebo is shut down or CTRL
         wheel.drive_wheels(1, -1) #turn
     else:
         wheel.drive_wheels(1, 1) #go staright
+    if (start_time - time.time()) > 10
+        wheel.drive_wheels(0,0)
     print("Current Heading: ", locHead.heading, "Current x val: ", locHead.x, "RightMostLaser: ", laser.laserRanges[0]) #print some random data to the command line
 
 # end of control loop snippet
