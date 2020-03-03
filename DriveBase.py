@@ -93,7 +93,7 @@ while not rospy.is_shutdown():  #this will run until gazebo is shut down or CTRL
         wheel.drive_wheels(1, -1) #turn
     else:
         wheel.drive_wheels(1, 1) #go staright
-    if (start_time - time.time()) > 10:
+    if (time.time() - start_time) > 10:
         wheel.drive_wheels(0,0)
     print("Current Heading: ", locHead.heading, "Current x val: ", locHead.x, "RightMostLaser: ", laser.laserRanges[0]) #print some random data to the command line
 
