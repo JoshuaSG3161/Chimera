@@ -75,19 +75,19 @@ class turnBoi:
     
     def __init__(self):
         self.leftCounter = 0
-        self.rightCounter = 0
+        self.rightCounter = 0        
     
 #Calc the number of beams touching an object on the left
     def distanceCalcLeft(self):
-        for l in range (0,7):
-            if laser.laserRanges[l] < 5:
+        for l in range (0,8):
+            if laser.laserRanges[l] < 4:
                 self.leftCounter = self.leftCounter + 1
         return self.leftCounter
     
 ##Calc the number of beams touching an object on the right
     def distanceCalcRight(self):
         for r in range (8,15):
-            if laser.laserRanges[r] < 5:
+            if laser.laserRanges[r] < 4:
                 self.rightCounter = self.rightCounter + 1
         return self.rightCounter
         
@@ -118,14 +118,18 @@ class turnBoi:
         for x in range(0, 15): #iterate through the ranges list
             if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
                 minRange = laser.laserRanges[x] #update the range
-        if minRange < 5: #if there is something closer than 3m infront of the rover
+        if minRange < 3: #if there is something closer than 3m infront of the rover
             print("Turningggggggggggggggggggg")
             if (self.rightCounter>self.leftCounter):
                 wheel.drive_wheels(1, -1)
+                self.rightCounter = 0
+                self.leftCounter = 0
                 #SKRRRT=(LeftTurn())
                 print("Left Turn")
             if (self.rightCounter<self.leftCounter):
                 wheel.drive_wheels(-1, 1)
+                self.rightCounter = 0
+                self.leftCounter = 0
                 #SKRRRT=(RightTurn())
                 print("Right Turn")
         else:
@@ -188,5 +192,7 @@ while not rospy.is_shutdown():
 #        wheel.drive_wheels(1, 1) #go staright
 ##    if (start_time - time.time()) > 10000:
 ##        wheel.drive_wheels(0,0)
+
+
 
 
