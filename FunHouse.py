@@ -71,49 +71,66 @@ class LocationHeading:
         
 #This function will decide which way to turn
 class turnBoi:
+
     
-    global LeftTurn
-    global RightTurn
-    global distanceCalcLeft
-    global distanceCalcRight
+    def __init__(self):
+        self.leftCounter = 0
+        self.rightCounter = 0
     
 #Calc the number of beams touching an object on the left
-    def distanceCalcLeft():
-        leftCounter = 0
+    def distanceCalcLeft(self):
         for l in range (0,7):
             if laser.laserRanges[l] < 5:
-                leftCounter = leftCounter + 1
-        return leftCounter
+                self.leftCounter = self.leftCounter + 1
+        return self.leftCounter
     
 ##Calc the number of beams touching an object on the right
-    def distanceCalcRight():
-        rightCounter = 0
+    def distanceCalcRight(self):
         for r in range (8,15):
             if laser.laserRanges[r] < 5:
-                rightCounter = rightCounter + 1
-        return rightCounter
+                self.rightCounter = self.rightCounter + 1
+        return self.rightCounter
         
 #Turn Rover Boi left
-    def LeftTurn():
-        minRangeL = 50
-        for x in range(0, 7): #iterate through the ranges list
-            if laser.laserRanges[x] < minRangeL: #if the current range is smaller than the smallest know range
-                minRangeL = laser.laserRanges[x] #update the range
-        if minRangeL < 5: #if there is something closer than 3m infront of the rover
-            wheel.drive_wheels(1, -1) #turn
-        else:
-            wheel.drive_wheels(1, 1) #go staright
+#    def LeftTurn():
+#        minRangeL = 50
+#        for x in range(0, 7): #iterate through the ranges list
+#            if laser.laserRanges[x] < minRangeL: #if the current range is smaller than the smallest know range
+#                minRangeL = laser.laserRanges[x] #update the range
+#        if minRangeL < 5: #if there is something closer than 3m infront of the rover
+#            wheel.drive_wheels(1, -1) #turn
+#        else:
+#            wheel.drive_wheels(1, 1) #go staright
         
 #Turn Rover Boi right
-    def RightTurn():
-        minRangeR = 50
-        for x in range(8, 15): #iterate through the ranges list
-            if laser.laserRanges[x] < minRangeR: #if the current range is smaller than the smallest know range
-                minRangeR = laser.laserRanges[x] #update the range
-        if minRangeR < 5: #if there is something closer than 3m infront of the rover
-            wheel.drive_wheels(-1, 1) #turn
+#    def RightTurn():
+#        minRangeR = 50
+#        for x in range(8, 15): #iterate through the ranges list
+#            if laser.laserRanges[x] < minRangeR: #if the current range is smaller than the smallest know range
+#                minRangeR = laser.laserRanges[x] #update the range
+#        if minRangeR < 5: #if there is something closer than 3m infront of the rover
+#            wheel.drive_wheels(-1, 1) #turn
+#        else:
+#            wheel.drive_wheels(1, 1) #go staright
+            
+    def turnNow(self):
+        minRange = 50 #initialize minRange to a value larger than what will be recieved
+        for x in range(0, 15): #iterate through the ranges list
+            if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
+                minRange = laser.laserRanges[x] #update the range
+        if minRange < 5: #if there is something closer than 3m infront of the rover
+            print("Turningggggggggggggggggggg")
+            if (self.rightCounter>self.leftCounter):
+                wheel.drive_wheels(1, -1)
+                #SKRRRT=(LeftTurn())
+                print("Left Turn")
+            if (self.rightCounter<self.leftCounter):
+                wheel.drive_wheels(-1, 1)
+                #SKRRRT=(RightTurn())
+                print("Right Turn")
         else:
-            wheel.drive_wheels(1, 1) #go staright
+            wheel.drive_wheels(1, 1)
+            print("Driving Forward")
 
         
 # end of localization stuff
@@ -129,15 +146,11 @@ SKRRRT = turnBoi()
 # start of control loop snippet
 
 while not rospy.is_shutdown():
-
-    SKRRRT = (distanceCalcLeft())
-    SKRRRT = (distanceCalcRight())
-    if (rightCounter>leftCounter):
-        SKRRRT = (LeftTurn())
-    if (rightCounter<leftCounter):
-        SKRRRT = (RightTurn())
-    else:
-        print("You suck and now you don't get pizza")
+    SKRRRT.distanceCalcLeft()
+    SKRRRT.distanceCalcRight()
+    SKRRRT.turnNow()
+    print("Passed Function")
+    
 #    minRange = 50 #initialize minRange to a value larger than what will be recieved
 #    for x in range(0, 15): #iterate through the ranges list
 #        if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
@@ -175,3 +188,5 @@ while not rospy.is_shutdown():
 #        wheel.drive_wheels(1, 1) #go staright
 ##    if (start_time - time.time()) > 10000:
 ##        wheel.drive_wheels(0,0)
+
+
