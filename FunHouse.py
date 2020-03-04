@@ -1,35 +1,30 @@
-#start of code snippets
+#Code of the RoVeR as of March 4th
 
-import rospy  # this is the module required for all simulation communication
+#Imports given by the GOAT himself (Owen)
+import rospy
 import time
 
-start_time = time.time()
-
 # start of wheel control code
-from wheel_control.msg import wheelSpeed  # this is a required module for the drive communication
-
+# this is a required module for the drive communication
+from wheel_control.msg import wheelSpeed  
 rospy.init_node("controller")
 
+#Class to control the speeds of the wheels and differentiate between different drive wheels 
 class WheelController:
 
     def __init__(self):
         self.wheel_pub = rospy.Publisher("/gazebo_wheelControl/wheelSpeedTopic", wheelSpeed, queue_size=1)
 
     def drive_wheels(self, left, right):
-        # type: (float, float) -> None
-        # left and right are numbers between -1 and 1
         msg = wheelSpeed()
         msg.left = left
         msg.right = right
         msg.wheelMode = 0
         self.wheel_pub.publish(msg)
-        #print(msg)
-
 # end of wheel control code
 
 # start of laser scan code
 from sensor_msgs.msg import LaserScan
-
 
 class LaserListener:
 
@@ -38,14 +33,12 @@ class LaserListener:
         self.laserRanges = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
     def laser_callback(self, msg):
-        # type: (LaserScan) -> None
         self.laserRanges = msg.ranges
 # end of laser scan code access laserRanges for an array of all measured distances from the laser sensors
 
 # start of localization stuff
 from geometry_msgs.msg import Point
 from std_msgs.msg import Float32
-
 
 class LocationHeading:
 
@@ -58,19 +51,16 @@ class LocationHeading:
         self.heading = 0.0
 
     def fix_callback(self, msg):
-        # type: (Point) -> None
         self.x = msg.x
         self.y = msg.y
         self.z = msg.z
 
     def heading_callback(self, msg):
-        # type: (Float32) -> None
         self.heading = msg.data
         
 #This function will decide which way to turn
 class turnBoi:
 
-    
     def __init__(self):
         self.leftCounter = 0
         self.rightCounter = 0        
@@ -110,11 +100,8 @@ class turnBoi:
                 print("Right Turn")
         else:
             wheel.drive_wheels(1, 1)
-            print("Driving Forward")
-
-        
+            print("Driving Forward")     
 # end of localization stuff
-
 
 #initiallize classes to get and send data to gazebo
 locHead  = LocationHeading()
@@ -124,11 +111,8 @@ SKRRRT = turnBoi()
 #end of initialization
 
 # start of control loop snippet
-
 while not rospy.is_shutdown():
     SKRRRT.distanceCalcLeft()
     SKRRRT.distanceCalcRight()
     SKRRRT.turnNow()
     print("Passed Function")
-
-
