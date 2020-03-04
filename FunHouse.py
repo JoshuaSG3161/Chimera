@@ -1,6 +1,5 @@
 #start of code snippets
 
-
 import rospy  # this is the module required for all simulation communication
 import time
 
