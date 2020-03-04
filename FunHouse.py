@@ -26,7 +26,6 @@ class WheelController:
         self.wheel_pub.publish(msg)
         #print(msg)
 
-
 # end of wheel control code
 
 # start of laser scan code
@@ -90,28 +89,6 @@ class turnBoi:
             if laser.laserRanges[r] < 4:
                 self.rightCounter = self.rightCounter + 1
         return self.rightCounter
-        
-#Turn Rover Boi left
-#    def LeftTurn():
-#        minRangeL = 50
-#        for x in range(0, 7): #iterate through the ranges list
-#            if laser.laserRanges[x] < minRangeL: #if the current range is smaller than the smallest know range
-#                minRangeL = laser.laserRanges[x] #update the range
-#        if minRangeL < 5: #if there is something closer than 3m infront of the rover
-#            wheel.drive_wheels(1, -1) #turn
-#        else:
-#            wheel.drive_wheels(1, 1) #go staright
-        
-#Turn Rover Boi right
-#    def RightTurn():
-#        minRangeR = 50
-#        for x in range(8, 15): #iterate through the ranges list
-#            if laser.laserRanges[x] < minRangeR: #if the current range is smaller than the smallest know range
-#                minRangeR = laser.laserRanges[x] #update the range
-#        if minRangeR < 5: #if there is something closer than 3m infront of the rover
-#            wheel.drive_wheels(-1, 1) #turn
-#        else:
-#            wheel.drive_wheels(1, 1) #go staright
             
     def turnNow(self):
         minRange = 50 #initialize minRange to a value larger than what will be recieved
@@ -154,45 +131,5 @@ while not rospy.is_shutdown():
     SKRRRT.distanceCalcRight()
     SKRRRT.turnNow()
     print("Passed Function")
-    
-#    minRange = 50 #initialize minRange to a value larger than what will be recieved
-#    for x in range(0, 15): #iterate through the ranges list
-#        if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
-#            minRange = laser.laserRanges[x] #update the range
-#    if minRange < 5: #if there is something closer than 3m infront of the rover
-#        wheel.drive_wheels(1, -1) #turn
-#    else:
-#        wheel.drive_wheels(1, 1) #go staright
-#    if (time.time() - start_time) > 10:
-#        wheel.drive_wheels(0,0)
-#    print("Pizza Time")
-
-
-#while not rospy.is_shutdown():  #this will run until gazebo is shut down or CTRL+C is pressed in the ubuntu window that is running this code
-#    minRange = 50 #initialize minRange to a value larger than what will be recieved
-#    y=0
-#    z=0
-#    for x in range(0, 15): #iterate through the ranges list
-#        if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
-#            if (x<7):
-#                y =+ 1
-#            else:
-#                z =+ 0
-#            minRange = laser.laserRanges[x] #update the range
-#    #if minRange < 3: #if there is something closer than 3m infront of the rover
-#    if (y>z):
-#        wheel.drive_wheels(1, -1) #turn
-#    if (z>y):
-#        wheel.drive_wheels(-1,1)
-#        #if laser.laserRanges[1:6] < 5: #If object on left, turn right
-#            #wheel.drive_wheels(1, -1) #turn
-#        #if laser.laserRanges[7:15] < 5:
-#            #wheel.drive_wheels(-1, 1) #turn
-#    else:
-#        wheel.drive_wheels(1, 1) #go staright
-##    if (start_time - time.time()) > 10000:
-##        wheel.drive_wheels(0,0)
-
-
 
 
