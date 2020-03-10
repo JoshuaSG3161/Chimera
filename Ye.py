@@ -104,6 +104,8 @@ class turnBoi:
             
     def stoppyBoi(self):
         if locHead.y < -10:
+            wheel.drive_wheels(-1, -1)
+            time.sleep(2)
             wheel.drive_wheels(0, 0)
         else:
             wheel.drive_wheels(1, 1)
