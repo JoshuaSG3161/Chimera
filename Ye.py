@@ -103,9 +103,9 @@ class turnBoi:
             print("Driving Forward")   
             
     def stoppyBoi(self):
-        if locHead.y < -10:
+        if locHead.y < -11:
             wheel.drive_wheels(-1, -1)
-            time.sleep(2)
+        elif locHead.y < -9 && locHead.y > -11:
             wheel.drive_wheels(0, 0)
         else:
             wheel.drive_wheels(1, 1)
