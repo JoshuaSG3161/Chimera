@@ -78,7 +78,7 @@ class turnBoi:
             if laser.laserRanges[r] < 4:
                 self.rightCounter = self.rightCounter + 1
         return self.rightCounter
-            
+    
     def turnNow(self):
         minRange = 50 #initialize minRange to a value larger than what will be recieved
         for x in range(0, 15): #iterate through the ranges list
@@ -100,7 +100,14 @@ class turnBoi:
                 print("Right Turn")
         else:
             wheel.drive_wheels(1, 1)
-            print("Driving Forward")     
+            print("Driving Forward")   
+            
+    def stoppyBoi(self):
+        if locHead.y < -10:
+            wheel.drive_wheels(0, 0)
+        else:
+            wheel.drive_wheels(1, 1)
+                
 # end of localization stuff
 
 #initiallize classes to get and send data to gazebo
@@ -114,5 +121,6 @@ SKRRRT = turnBoi()
 while not rospy.is_shutdown():
     SKRRRT.distanceCalcLeft()
     SKRRRT.distanceCalcRight()
-    SKRRRT.turnNow()
+    #SKRRRT.turnNow()
+    SKRRRT.stoppyBoi()
     print("Passed Function")
