@@ -105,13 +105,21 @@ class turnBoi:
     def stoppyBoi(self):
         if locHead.y < -11:
             wheel.drive_wheels(-0.5, -0.5)
-        elif locHead.y < -9.8 and locHead.y > -10.8:
+        elif locHead.y < -10 and locHead.y > -11:
             wheel.drive_wheels(0, 0)
         else:
             wheel.drive_wheels(1, 1)
                 
 # end of localization stuff
 
+class RoverDirection:
+    
+    def path(self, x, y):
+        angle = arctan((y - locHead.y)/(x - locHead.x))
+        while angle != locHead.heading:
+            wheel.drive_wheels(-1, 1)
+        wheel.drive_wheels(1,1)
+        
 #initiallize classes to get and send data to gazebo
 locHead  = LocationHeading()
 laser = LaserListener()
