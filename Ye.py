@@ -105,7 +105,7 @@ class turnBoi:
     def stoppyBoi(self):
         if locHead.y < -11:
             wheel.drive_wheels(-0.5, -0.5)
-        elif locHead.y < -10 and locHead.y > -11:
+        elif locHead.y < -9.8 and locHead.y > -10.8:
             wheel.drive_wheels(0, 0)
         else:
             wheel.drive_wheels(1, 1)
