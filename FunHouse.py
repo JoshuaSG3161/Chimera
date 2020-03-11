@@ -66,10 +66,16 @@ class turnBoi:
     def __init__(self, xCoordinate, yCoordinate, slowDown):
         self.leftCounter = 0
         self.rightCounter = 0
+        self.tightCounter = 0
         self.pointBX = xCoordinate
         self.pointBY = yCoordinate
         self.slowSpeed = self.pointBY - slowDown
     
+    def tightDrive(self):
+        for t in range (3,12):
+            if laser.laserRanges[t] < 2:
+                self.tightCounter = self.tightCounter + 1
+        return self.tightCounter
 #Calc the number of beams touching an object on the left
     def distanceCalcLeft(self):
         for l in range (0,8):
@@ -89,14 +95,16 @@ class turnBoi:
         for x in range(0, 15): #iterate through the ranges list
             if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
                 minRange = laser.laserRanges[x] #update the range
-        if minRange < 3: #if there is something closer than 3m infront of the rover
+        if minRange < 2: #if there is something closer than 3m infront of the rover
             if (self.rightCounter>self.leftCounter):
+                print("Object on the right")
                 wheel.drive_wheels(1, -1)
                 self.rightCounter = 0
                 self.leftCounter = 0
                 #SKRRRT=(LeftTurn())
                 print("<<<Left Turn")
             if (self.rightCounter<self.leftCounter):
+                print("Object on the left")
                 wheel.drive_wheels(-1, 1)
                 self.rightCounter = 0
                 self.leftCounter = 0
@@ -111,7 +119,7 @@ class turnBoi:
             wheel.drive_wheels(0.0, 0.0)
             print("--Stopping all wheels now--")
         elif locHead.y < self.slowSpeed:
-            wheel.drive_wheels(0.25, 0.25)
+            wheel.drive_wheels(0.1, 0.1)
             print("Slowing down now")
         else:
             wheel.drive_wheels(1, 1)
@@ -123,7 +131,7 @@ laser = LaserListener()
 wheel = WheelController()
 #Input point B into the turnBoi Class as instance variables
 #Example: (xCoordinate, yCoordinate) = (5.0, 10.0)
-SKRRRT = turnBoi(0.0, -10.0, -5)
+SKRRRT = turnBoi(0.0, -20.0, -5)
 #end of initialization
 
 # start of control loop snippet
