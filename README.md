@@ -6,6 +6,7 @@ Chimera: a fire-breathing female monster with a lion's head, a goat's body, and 
 March 11, Code now can stop on location and be running with turn code. Still waiting on client to fix heading function to find location in x direction. 
 
 Made FunHouse.py for all of Josh's coding
+
 MADLADS == Alex's Safe Space
 
 TODO
