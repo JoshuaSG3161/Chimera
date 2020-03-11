@@ -1,5 +1,5 @@
 #Code of the RoVeR as of March 4th
-#This is a test
+
 #Imports given by the GOAT himself (Owen)
 import rospy
 import time
@@ -8,6 +8,8 @@ import time
 # this is a required module for the drive communication
 from wheel_control.msg import wheelSpeed  
 rospy.init_node("controller")
+
+#global slowDown
 
 #Class to control the speeds of the wheels and differentiate between different drive wheels 
 class WheelController:
@@ -48,8 +50,6 @@ class LocationHeading:
         self.x = 0.0
         self.y = 0.0
         self.z = 0.0
-        self.xf = 0.0
-        self.yf = 0.0
         self.heading = 0.0
 
     def fix_callback(self, msg):
@@ -58,28 +58,17 @@ class LocationHeading:
         self.z = msg.z
 
     def heading_callback(self, msg):
-        self.heading = msg.data
-        
-    def locationB(self):
-        #This is to set the location of point b to some grid location
-        self.xf = 0.0
-        self.yf = -5.0
-        return self.xf, self.yf
-    
-    def stoppyBoi(self):
-        if locHead.y < self.yf:
-            wheel.drive_wheels(0, 0)
-        else:
-            wheel.drive_wheels(1, 1)
-            
-        
+        self.heading = msg.data        
         
 #This function will decide which way to turn
 class turnBoi:
 
-    def __init__(self):
+    def __init__(self, xCoordinate, yCoordinate, slowDown):
         self.leftCounter = 0
-        self.rightCounter = 0        
+        self.rightCounter = 0
+        self.pointBX = xCoordinate
+        self.pointBY = yCoordinate
+        self.slowSpeed = self.pointBY - slowDown
     
 #Calc the number of beams touching an object on the left
     def distanceCalcLeft(self):
@@ -101,29 +90,40 @@ class turnBoi:
             if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
                 minRange = laser.laserRanges[x] #update the range
         if minRange < 3: #if there is something closer than 3m infront of the rover
-            print("Turningggggggggggggggggggg")
             if (self.rightCounter>self.leftCounter):
                 wheel.drive_wheels(1, -1)
                 self.rightCounter = 0
                 self.leftCounter = 0
                 #SKRRRT=(LeftTurn())
-                print("Left Turn")
+                print("<<<Left Turn")
             if (self.rightCounter<self.leftCounter):
                 wheel.drive_wheels(-1, 1)
                 self.rightCounter = 0
                 self.leftCounter = 0
                 #SKRRRT=(RightTurn())
-                print("Right Turn")
+                print("Right Turn>>>")
         else:
             wheel.drive_wheels(1, 1)
-            print("Driving Forward")     
+            print("Driving Forward")
+    
+    def stoppyBoi(self):
+        if locHead.y < self.pointBY:
+            wheel.drive_wheels(0.0, 0.0)
+            print("--Stopping all wheels now--")
+        elif locHead.y < self.slowSpeed:
+            wheel.drive_wheels(0.25, 0.25)
+            print("Slowing down now")
+        else:
+            wheel.drive_wheels(1, 1)
 # end of localization stuff
 
 #initiallize classes to get and send data to gazebo
 locHead  = LocationHeading()
 laser = LaserListener()
 wheel = WheelController()
-SKRRRT = turnBoi()
+#Input point B into the turnBoi Class as instance variables
+#Example: (xCoordinate, yCoordinate) = (5.0, 10.0)
+SKRRRT = turnBoi(0.0, -10.0, -5)
 #end of initialization
 
 # start of control loop snippet
@@ -136,8 +136,8 @@ while not rospy.is_shutdown():
         SKRRRT.distanceCalcLeft()
         SKRRRT.distanceCalcRight()
         SKRRRT.turnNow()
-        print("Passed Function")
     else:
-        locHead.stoppyBoi()
+        SKRRRT.stoppyBoi()
+        
     #print("Current Heading: ", locHead.heading, "Current x val: ", locHead.x, "RightMostLaser: ", laser.laserRanges[0])
     #print("Current y val: ", locHead.y, "Current z val: ", locHead.z, "LeftMostLaser: ", laser.laserRanges[15])
