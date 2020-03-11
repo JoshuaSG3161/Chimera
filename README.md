@@ -1,5 +1,6 @@
 # Chimera
 Code to be worked on during MOD 3 project
+
 Chimera: a fire-breathing female monster with a lion's head, a goat's body, and a serpent's tail.
 
 March 11, Code now can stop on location and be running with turn code. Still waiting on client to fix heading function to find location in x direction. 
