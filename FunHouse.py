@@ -114,7 +114,7 @@ class turnBoi:
             wheel.drive_wheels(1, 1)
             print("Driving Forward")
     
-    def stoppyBoi(self):
+    def stoppyBoiY(self):
         if locHead.y < self.pointBY:
             wheel.drive_wheels(0.0, 0.0)
             print("--Stopping all wheels now--")
@@ -122,6 +122,20 @@ class turnBoi:
             wheel.drive_wheels(0.1, 0.1)
             print("Slowing down now")
         else:
+            wheel.drive_wheels(1, 1)
+    
+    def stoppyBoiX(self):
+        if locHead.x < self.pointBX:
+            wheel.drive_wheels(0.0, 0.0)
+            print("--Stopping all wheels now--")
+        elif locHead.x < self.slowSpeed:
+            wheel.drive_wheels(0.1, 0.1)
+            print("Slowing down now")
+        else:
+            wheel.drive_wheels(1, 1)
+            
+    def detectClose(self):
+        if(self.tightCounter>1):
             wheel.drive_wheels(1, 1)
 # end of localization stuff
 
@@ -144,8 +158,11 @@ while not rospy.is_shutdown():
         SKRRRT.distanceCalcLeft()
         SKRRRT.distanceCalcRight()
         SKRRRT.turnNow()
+    if minRange < 2:
+        SKRRRT.detectCLose()
     else:
-        SKRRRT.stoppyBoi()
+        SKRRRT.stoppyBoiY()
+        SKRRRT.stoppyBoiX()
         
-    #print("Current Heading: ", locHead.heading, "Current x val: ", locHead.x, "RightMostLaser: ", laser.laserRanges[0])
-    #print("Current y val: ", locHead.y, "Current z val: ", locHead.z, "LeftMostLaser: ", laser.laserRanges[15])
+    print("Current Heading: ", locHead.heading, "Current x val: ", locHead.x, "RightMostLaser: ", laser.laserRanges[0])
+    print("Current y val: ", locHead.y, "Current z val: ", locHead.z, "LeftMostLaser: ", laser.laserRanges[15])
