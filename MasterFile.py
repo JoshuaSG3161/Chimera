@@ -132,17 +132,17 @@ class turnBoi:
             print("Right Turn")
 
 #This function detects if the rover can fit between onjects
-    def tightDrive(self):
-        for t in range (3,12):
-            if laser.laserRanges[t] < 2:
-                self.tightCounter = self.tightCounter + 1
-        return self.tightCounter
+#    def tightDrive(self):
+#        for t in range (3,12):
+#            if laser.laserRanges[t] < 2:
+#                self.tightCounter = self.tightCounter + 1
+#        return self.tightCounter
 
 #This function finds the Y-coordinate
-    def detectClose(self):
-        if(self.tightCounter > 1):
-            wheel.drive_wheels(1, 1)
-            
+#    def detectClose(self):
+#        if(self.tightCounter > 1):
+#            wheel.drive_wheels(1, 1)
+#            
         def stoppyBoiY(self):
         if locHead.y < self.pointBY:
             wheel.drive_wheels(0.0, 0.0)
@@ -170,7 +170,6 @@ class turnBoi:
 locHead  = LocationHeading()
 laser = LaserListener()
 wheel = WheelController()
-SKRRRT = turnBoi()
 SKRRRT = turnBoi(0.0, -20.0, -5)
 #end of initialization
 
@@ -182,8 +181,8 @@ while not rospy.is_shutdown():
             minRange = laser.laserRanges[x] #update the range
     if min Range < 3 and SKRRRT.scan():
         SKRRRT.turnNow()
-    if minRange < 2:
-        SKRRRT.detectCLose()
+#    if minRange < 2:
+#        SKRRRT.detectClose()
     else:
         wheel.drive_wheels(0.5, 0.5)
     print("Passed Function")
