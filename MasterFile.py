@@ -65,6 +65,9 @@ class turnBoi:
         self.leftCounter = 0
         self.rightCounter = 0
         self.tightCounter = 0
+        self.pointBX = xCoordinate
+        self.pointBY = yCoordinate
+        self.slowSpeed = self.pointBY - slowDown
 
 #This function looks at which beamns of the LiDAR are coming in contact with objects
     def scan(self):
@@ -134,9 +137,31 @@ class turnBoi:
             if laser.laserRanges[t] < 2:
                 self.tightCounter = self.tightCounter + 1
         return self.tightCounter
-    
+
+#This function finds the Y-coordinate
     def detectClose(self):
         if(self.tightCounter > 1):
+            wheel.drive_wheels(1, 1)
+            
+        def stoppyBoiY(self):
+        if locHead.y < self.pointBY:
+            wheel.drive_wheels(0.0, 0.0)
+            print("--Stopping all wheels now--")
+        elif locHead.y < self.slowSpeed:
+            wheel.drive_wheels(0.1, 0.1)
+            print("Slowing down now")
+        else:
+            wheel.drive_wheels(1, 1)
+    
+#This function finds the X-coordinate
+    def stoppyBoiX(self):
+        if locHead.x < self.pointBX:
+            wheel.drive_wheels(0.0, 0.0)
+            print("--Stopping all wheels now--")
+        elif locHead.x < self.slowSpeed:
+            wheel.drive_wheels(0.1, 0.1)
+            print("Slowing down now")
+        else:
             wheel.drive_wheels(1, 1)
                 
 # end of localization stuff
