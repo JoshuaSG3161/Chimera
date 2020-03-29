@@ -61,7 +61,7 @@ class LocationHeading:
 #This function will decide which way to turn
 class turnBoi:
 
-    def __init__(self):
+    def __init__(self, xCoordinate, yCoordinate, slowDown):
         self.leftCounter = 0
         self.rightCounter = 0
         self.tightCounter = 0
@@ -171,6 +171,7 @@ locHead  = LocationHeading()
 laser = LaserListener()
 wheel = WheelController()
 SKRRRT = turnBoi()
+SKRRRT = turnBoi(0.0, -20.0, -5)
 #end of initialization
 
 # start of control loop snippet
