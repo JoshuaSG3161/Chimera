@@ -61,13 +61,10 @@ class LocationHeading:
 #This function will decide which way to turn
 class turnBoi:
 
-    def __init__(self, xCoordinate, yCoordinate, slowDown):
+    def __init__(self)
         self.leftCounter = 0
         self.rightCounter = 0
-        self.tightCounter = 0
-        self.pointBX = xCoordinate
-        self.pointBY = yCoordinate
-        self.slowSpeed = self.pointBY - slowDown
+        self.goFirst = 0
 
 #This function looks at which beamns of the LiDAR are coming in contact with objects
     def scan(self):
@@ -116,26 +113,32 @@ class turnBoi:
             elif index == 4 and laser.laserRanges[4] <= 2.6:
                 collision = True
                 self.leftCounter = 1
+                self.goFirst =1
                 break
             elif index == 11 and laser.laserRanges[11] <= 2.6:
                 collision = True
                 self.rightCounter = 1
+                self.goFirst =1
                 break
             elif index == 5 and laser.laserRanges[5] <= 3.6:
                 collision = True
                 self.leftCounter = 1
+                self.goFirst =1
                 break
             elif index == 10 and laser.laserRanges[10] <= 3.6:
                 collision = True
                 self.rightCounter = 1
+                self.goFirst = 1
                 break
             elif index == 6 and laser.laserRanges[6] <= 5.9:
                 collision = True
                 self.leftCounter = 1
+                self.goFirst = 1
                 break
             elif index == 9 and laser.laserRanges[9] <= 5.9:
                 collision = True
                 self.rightCounter = 1
+                self.goFirst = 1
                 break
             else:
                 collision = False
@@ -145,57 +148,27 @@ class turnBoi:
 #This function decides which way to turn
     def turnNow(self):
         print("Turning")
-        if self.rightCounter < self.leftCounter:
-            wheel.drive_wheels(1, -1)
-            self.rightCounter = 0
-            self.leftCounter = 0
-            print("Left Turn")
-        elif self.leftCounter < self.rightCounter:
-            wheel.drive_wheels(-1, 1)
-            self.rightCounter = 0
-            self.leftCounter = 0
-            print("Right Turn")
-
-#This function detects if the rover can fit between onjects
-    def tightDrive(self):
-        for t in range (3,12):
-            if laser.laserRanges[t] < 2:
-                self.tightCounter = self.tightCounter + 1
-        return self.tightCounter
-
-#This function finds the Y-coordinate
-    def detectClose(self):
-        if(self.tightCounter > 1):
-            wheel.drive_wheels(1, 1)
-            
-    def stoppyBoiY(self):
-        if locHead.y < self.pointBY:
-            wheel.drive_wheels(0.0, 0.0)
-            print("--Stopping all wheels now--")
-        elif locHead.y < self.slowSpeed:
-            wheel.drive_wheels(0.1, 0.1)
-            print("Slowing down now")
+        if (self.goFirst > self.rightCounter) or (self.goFirst > self.leftCounter):
+            wheel.drive_wheels(0.5, 0.5)
+            print("I can fit dawg")
         else:
-            wheel.drive_wheels(1, 1)
-    
-#This function finds the X-coordinate
-    def stoppyBoiX(self):
-        if locHead.x < self.pointBX:
-            wheel.drive_wheels(0.0, 0.0)
-            print("--Stopping all wheels now--")
-        elif locHead.x < self.slowSpeed:
-            wheel.drive_wheels(0.1, 0.1)
-            print("Slowing down now")
-        else:
-            wheel.drive_wheels(1, 1)
-                
+            if self.rightCounter < self.leftCounter:
+                wheel.drive_wheels(1, -1)
+                self.rightCounter = 0
+                self.leftCounter = 0
+                print("Left Turn")
+            elif self.leftCounter < self.rightCounter:
+                wheel.drive_wheels(-1, 1)
+                self.rightCounter = 0
+                self.leftCounter = 0
+                print("Right Turn")                
 # end of localization stuff
 
 #initiallize classes to get and send data to gazebo
 locHead  = LocationHeading()
 laser = LaserListener()
 wheel = WheelController()
-SKRRRT = turnBoi(0.0, -20.0, -5.0)
+SKRRRT = turnBoi()
 #end of initialization
 
 # start of control loop snippet
@@ -204,10 +177,10 @@ while not rospy.is_shutdown():
     for x in range(0, 15): #iterate through the ranges list
         if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
             minRange = laser.laserRanges[x] #update the range
-    if minRange < 3 and SKRRRT.scan():
+    if SKRRRT.scan():
         SKRRRT.turnNow()
-    if minRange < 2:
-        SKRRRT.detectClose()
     else:
         wheel.drive_wheels(0.5, 0.5)
     print("Passed Function")
+
+
