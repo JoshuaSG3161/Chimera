@@ -66,16 +66,10 @@ class turnBoi:
     def __init__(self, xCoordinate, yCoordinate, slowDown):
         self.leftCounter = 0
         self.rightCounter = 0
-        self.tightCounter = 0
         self.pointBX = xCoordinate
         self.pointBY = yCoordinate
         self.slowSpeed = self.pointBY - slowDown
     
-    def tightDrive(self):
-        for t in range (3,12):
-            if laser.laserRanges[t] < 2:
-                self.tightCounter = self.tightCounter + 1
-        return self.tightCounter
 #Calc the number of beams touching an object on the left
     def distanceCalcLeft(self):
         for l in range (0,8):
@@ -133,10 +127,6 @@ class turnBoi:
             print("Slowing down now")
         else:
             wheel.drive_wheels(1, 1)
-            
-    def detectClose(self):
-        if(self.tightCounter>1):
-            wheel.drive_wheels(1, 1)
 # end of localization stuff
 
 #initiallize classes to get and send data to gazebo
@@ -158,8 +148,6 @@ while not rospy.is_shutdown():
         SKRRRT.distanceCalcLeft()
         SKRRRT.distanceCalcRight()
         SKRRRT.turnNow()
-    if minRange < 2:
-        SKRRRT.detectCLose()
     else:
         SKRRRT.stoppyBoiY()
         SKRRRT.stoppyBoiX()
