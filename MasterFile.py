@@ -71,50 +71,75 @@ class turnBoi:
 
 #This function looks at which beamns of the LiDAR are coming in contact with objects
     def scan(self):
-        if laser.laserRanges[0] <= 1.3:
-            collision = True
-            self.leftCounter = 7
-        elif laser.laserRanges[15] <= 1.3:
-            collision = True
-            self.rightCounter = 7
-        elif laser.laserRanges[1] <= 1.5:
-            collision = True
-            self.leftCounter = 6
-        elif laser.laserRanges[14] <= 1.5:
-            collision = True
-            self.rightCounter = 6
-        elif laser.laserRanges[2] <= 1.7:
-            collision = True
-            self.leftCounter = 5
-        elif laser.laserRanges[13] <= 1.7:
-            collision = True
-            self.rightCounter = 5
-        elif laser.laserRanges[3] <= 2.1:
-            collision = True
-            self.leftCounter = 4
-        elif laser.laserRanges[12] <= 2.1:
-            collision = True
-            self.rightCounter = 4
-        elif laser.laserRanges[4] <= 2.6:
-            collision = True
-            self.leftCounter = 3
-        elif laser.laserRanges[11] <= 2.6:
-            collision = True
-            self.rightCounter = 3
-        elif laser.laserRanges[5] <= 3.6:
-            collision = True
-            self.leftCounter = 2
-        elif laser.laserRanges[10] <= 3.6:
-            collision = True
-            self.rightCounter = 2
-        elif laser.laserRanges[6] <= 5.9:
-            collision = True
-            self.leftCounter = 1
-        elif laser.laserRanges[9] <= 5.9:
-            collision = True
-            self.rightCounter = 1
-        else:
-            collision = False
+        new_range = list(laser.laserRanges)
+        new_ranges = new_range[:]
+        min_range = new_ranges[0]
+        index = 0
+        while True:
+            for i in range(len(new_ranges)):
+                if min_range>new_ranges[i]:
+                    min_range = new_ranges[i]
+                    index = i
+                    
+            if index == 0 and laser.laserRanges[0] <= 1.3:
+                collision = True
+                self.leftCounter = 1
+                break
+            elif index == 15 and laser.laserRanges[15] <= 1.3:
+                collision = True
+                self.rightCounter = 1
+                break
+            elif index == 1 and laser.laserRanges[1] <= 1.5:
+                collision = True
+                self.leftCounter = 1
+                break
+            elif index == 14 and laser.laserRanges[14] <= 1.5:
+                collision = True
+                self.rightCounter = 1
+                break
+            elif index == 2 and laser.laserRanges[2] <= 1.7:
+                collision = True
+                self.leftCounter = 1
+                break
+            elif index == 13 and laser.laserRanges[13] <= 1.7:
+                collision = True
+                self.rightCounter = 1
+                break
+            elif index == 3 and laser.laserRanges[3] <= 2.1:
+                collision = True
+                self.leftCounter = 1
+                break
+            elif index == 12 and laser.laserRanges[12] <= 2.1:
+                collision = True
+                self.rightCounter = 1
+                break
+            elif index == 4 and laser.laserRanges[4] <= 2.6:
+                collision = True
+                self.leftCounter = 1
+                break
+            elif index == 11 and laser.laserRanges[11] <= 2.6:
+                collision = True
+                self.rightCounter = 1
+                break
+            elif index == 5 and laser.laserRanges[5] <= 3.6:
+                collision = True
+                self.leftCounter = 1
+                break
+            elif index == 10 and laser.laserRanges[10] <= 3.6:
+                collision = True
+                self.rightCounter = 1
+                break
+            elif index == 6 and laser.laserRanges[6] <= 5.9:
+                collision = True
+                self.leftCounter = 1
+                break
+            elif index == 9 and laser.laserRanges[9] <= 5.9:
+                collision = True
+                self.rightCounter = 1
+                break
+            else:
+                collision = False
+            del new_ranges[index:index+1]
         return collision
 
 #This function decides which way to turn
@@ -132,18 +157,18 @@ class turnBoi:
             print("Right Turn")
 
 #This function detects if the rover can fit between onjects
-#    def tightDrive(self):
-#        for t in range (3,12):
-#            if laser.laserRanges[t] < 2:
-#                self.tightCounter = self.tightCounter + 1
-#        return self.tightCounter
+    def tightDrive(self):
+        for t in range (3,12):
+            if laser.laserRanges[t] < 2:
+                self.tightCounter = self.tightCounter + 1
+        return self.tightCounter
 
 #This function finds the Y-coordinate
-#    def detectClose(self):
-#        if(self.tightCounter > 1):
-#            wheel.drive_wheels(1, 1)
-#            
-        def stoppyBoiY(self):
+    def detectClose(self):
+        if(self.tightCounter > 1):
+            wheel.drive_wheels(1, 1)
+            
+    def stoppyBoiY(self):
         if locHead.y < self.pointBY:
             wheel.drive_wheels(0.0, 0.0)
             print("--Stopping all wheels now--")
@@ -170,7 +195,7 @@ class turnBoi:
 locHead  = LocationHeading()
 laser = LaserListener()
 wheel = WheelController()
-SKRRRT = turnBoi(0.0, -20.0, -5)
+SKRRRT = turnBoi(0.0, -20.0, -5.0)
 #end of initialization
 
 # start of control loop snippet
@@ -179,10 +204,10 @@ while not rospy.is_shutdown():
     for x in range(0, 15): #iterate through the ranges list
         if laser.laserRanges[x] < minRange: #if the current range is smaller than the smallest know range
             minRange = laser.laserRanges[x] #update the range
-    if min Range < 3 and SKRRRT.scan():
+    if minRange < 3 and SKRRRT.scan():
         SKRRRT.turnNow()
-#    if minRange < 2:
-#        SKRRRT.detectClose()
+    if minRange < 2:
+        SKRRRT.detectClose()
     else:
         wheel.drive_wheels(0.5, 0.5)
     print("Passed Function")
