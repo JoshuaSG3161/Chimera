@@ -72,14 +72,14 @@ class turnBoi:
     
 #Calc the number of beams touching an object on the left
     def distanceCalcLeft(self):
-        for l in range (0,8):
+        for l in range (0,7):
             if laser.laserRanges[l] < 4:
                 self.leftCounter = self.leftCounter + 1
         return self.leftCounter
     
 ##Calc the number of beams touching an object on the right
     def distanceCalcRight(self):
-        for r in range (8,15):
+        for r in range (7,15):
             if laser.laserRanges[r] < 4:
                 self.rightCounter = self.rightCounter + 1
         return self.rightCounter
