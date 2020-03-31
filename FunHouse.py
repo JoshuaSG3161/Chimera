@@ -105,7 +105,7 @@ class turnBoi:
                 #SKRRRT=(RightTurn())
                 print("Right Turn>>>")
         else:
-            wheel.drive_wheels(1, 1)
+            wheel.drive_wheels(0.5, 0.5)
             print("Driving Forward")
     
     def stoppyBoiY(self):
@@ -116,7 +116,7 @@ class turnBoi:
             wheel.drive_wheels(0.1, 0.1)
             print("Slowing down now")
         else:
-            wheel.drive_wheels(1, 1)
+            wheel.drive_wheels(0.5, 0.5)
     
     def stoppyBoiX(self):
         if locHead.x < self.pointBX:
@@ -126,7 +126,7 @@ class turnBoi:
             wheel.drive_wheels(0.1, 0.1)
             print("Slowing down now")
         else:
-            wheel.drive_wheels(1, 1)
+            wheel.drive_wheels(0.5, 0.5)
 # end of localization stuff
 
 #initiallize classes to get and send data to gazebo
