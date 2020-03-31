@@ -135,7 +135,7 @@ laser = LaserListener()
 wheel = WheelController()
 #Input point B into the turnBoi Class as instance variables
 #Example: (xCoordinate, yCoordinate) = (5.0, 10.0)
-SKRRRT = turnBoi(0.0, -20.0, -5)
+SKRRRT = turnBoi(-8.0, -8.0, -5)
 #end of initialization
 
 # start of control loop snippet
